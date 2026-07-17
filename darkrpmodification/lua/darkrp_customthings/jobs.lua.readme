@@ -1,0 +1,31 @@
+--[[
+    Hot Dog Vendor job definition.
+
+    PLACEMENT:
+      garrysmod/addons/darkrpmodification/lua/darkrp_customthings/jobs.lua
+
+    IMPORTANT: If your server already has a "darkrpmodification" addon
+    (almost every DarkRP server does), do NOT overwrite its jobs.lua.
+    Instead, copy just the TEAM_HOTDOGVENDOR block below into your
+    existing jobs.lua file.
+--]]
+
+TEAM_HOTDOGVENDOR = DarkRP.createJob("Hot Dog Vendor", {
+    color = Color(235, 110, 40, 255),
+    model = {
+        "models/player/kleiner.mdl", -- swap for whatever vendor model(s) you'd like
+    },
+    description = [[Buy a hot dog stand, cook hot dogs in the kitchen minigame,
+and sell them to other players for profit.]],
+    weapons = {},
+    command = "hotdogvendor",
+    max = 4,               -- max players allowed to hold this job at once (0 = unlimited)
+    salary = 50,             -- vendors earn from sales
+    admin = 0,
+    vote = false,
+    hasLicense = false,
+    category = "Civilian",
+
+    -- CustomDarkRPVars can go here if your server uses them
+    -- e.g. NeedToChangeFrom = false,
+})

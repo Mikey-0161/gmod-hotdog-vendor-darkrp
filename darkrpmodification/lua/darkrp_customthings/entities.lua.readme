@@ -1,0 +1,41 @@
+--[[
+    F4 menu shop entry for the Hot Dog Stand entity.
+
+    PLACEMENT:
+      garrysmod/addons/darkrpmodification/lua/darkrp_customthings/entities.lua
+
+    IMPORTANT: If your server already has a "darkrpmodification" addon,
+    do NOT overwrite its entities.lua. Instead copy just the
+    DarkRP.createEntity(...) block below into your existing entities.lua.
+
+    NOTE: "price" here must be kept in sync with
+    hotdog_vendor/lua/hotdogvendor/sh_config.lua -> C.EntityShopPrice
+    (the two addons don't share config automatically since load order
+    between separate addons is not guaranteed).
+
+--]]
+
+
+DarkRP.createEntity("Hot Dog Stand", {
+    ent = "ent_hotdogstand",
+    model = "models/hotdogstand.mdl", -- Fallback or actual model path
+    price = 250,
+    max = 1,
+    cmd = "buyhotdogstand",
+    allowed = {TEAM_HOTDOGVENDOR},
+    spawn = function(ply, tr, tblEnt)
+        local ent = ents.Create("ent_hotdogstand")
+        if not IsValid(ent) then return end
+        ent:SetPos(tr.HitPos + tr.HitNormal * 16)
+        ent:SetAngles(Angle(0, ply:GetAngles().y, 0))
+        ent:Spawn()
+        ent:Activate()
+
+        -- FIX: Keep the working FPP assignment, but REMOVE the crashing Setowning_ent line
+        if ent.CPPISetOwner then 
+            ent:CPPISetOwner(ply) 
+        end
+
+        return ent
+    end
+})
