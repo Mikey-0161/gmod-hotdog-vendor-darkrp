@@ -15,13 +15,9 @@ local COLORS = {1, 2, 3, 4} -- 1=Red 2=Blue 3=Green 4=Yellow (must match client 
 
 local function showSpeedForRound(round)
     local cfg = HOTDOGVENDOR.Config.Cooking
+    -- Keeps display speeds fast and consistent for static length rounds
     local speed = cfg.BaseShowSpeed - (round - 1) * cfg.SpeedStep
     return math.max(speed, cfg.MinShowSpeed)
-end
-
-local function sequenceLengthForRound(round)
-    local cfg = HOTDOGVENDOR.Config.Cooking
-    return math.min(cfg.StartLength + (round - 1), cfg.MaxLength)
 end
 
 local function endSession(ent)
@@ -76,12 +72,14 @@ function HOTDOGVENDOR.NextRound(ply, ent)
     session.round = session.round + 1
     session.inputIdx = 1
 
-    local len = sequenceLengthForRound(session.round)
-    while #session.sequence < len do
+    -- FIX: Wipe past values entirely to force a completely fresh combination every single round
+    session.sequence = {}
+    
+    -- Change the number 5 below to 4 or 6 if you want to alter the static pattern difficulty length!
+    local targetPatternLength = 5 
+    
+    for i = 1, targetPatternLength do
         table.insert(session.sequence, COLORS[math.random(1, #COLORS)])
-    end
-    while #session.sequence > len do
-        table.remove(session.sequence, 1)
     end
 
     net.Start(HOTDOGVENDOR.Net.CookingRound)
