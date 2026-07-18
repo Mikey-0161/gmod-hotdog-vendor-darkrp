@@ -70,10 +70,17 @@ local function buildCookingFrame(ent)
             draw.RoundedBox(10, 4, 4, w - 8, h - 8, c)
             draw.SimpleText(def.name, "DermaDefaultBold", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
-        b.DoClick = function()
+        b.DoClick = function(self)
             if HOTDOGVENDOR.Config.EnableSounds then
                 surface.PlaySound(HOTDOGVENDOR.Config.Sounds.ButtonClick)
             end
+            
+            -- FIX: Force the clicked button to light up visually for 0.15 seconds
+            self.Lit = true
+            timer.Simple(0.15, function()
+                if IsValid(self) then self.Lit = false end
+            end)
+
             HOTDOGVENDOR.SubmitCookingInput(def.id)
         end
         frame.Buttons[def.id] = b
